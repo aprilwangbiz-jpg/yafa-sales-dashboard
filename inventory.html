@@ -18,19 +18,136 @@
 
   .page-header {
     background: #22293a;
-    padding: 28px 52px;
-    display: flex;
+    padding: 24px 52px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    justify-content: space-between;
+    gap: 20px;
   }
 
-  .logo-block h1 {
+  .logo-block h1 a {
     font-family: 'Libre Baskerville', serif;
     font-size: 1.9rem;
     font-weight: 700;
     color: #e8d9b4;
     letter-spacing: 0.12em;
     text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .logo-block h1 a::after {
+    content: ' ↗';
+    font-size: 0.9rem;
+    opacity: 0.6;
+    vertical-align: super;
+    font-family: 'Nunito Sans', sans-serif;
+  }
+
+  .logo-block h1 a:hover { color: #fff; }
+  .logo-block h1 a:hover::after { opacity: 1; }
+
+  .logo-block .site-link {
+    font-size: 0.6rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #6b7a96;
+    margin-top: 2px;
+    font-weight: 400;
+  }
+
+  .logo-block .site-link a {
+    color: #a0b0c8;
+    text-decoration: none;
+  }
+
+  .logo-block .site-link a:hover { color: #e8d9b4; text-decoration: underline; }
+
+  .catalog-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .cat-section-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #a0b0c8;
+    font-weight: 600;
+    font-family: 'Nunito Sans', sans-serif;
+  }
+
+  .catalog-btns {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .catalog-btns a {
+    display: inline-block;
+    padding: 8px 16px;
+    background: #b8892e;
+    border: none;
+    border-radius: 3px;
+    color: #fff;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-family: 'Nunito Sans', sans-serif;
+    transition: background 0.2s, transform 0.15s;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  }
+
+  .catalog-btns a:hover {
+    background: #d4a03a;
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+  }
+
+  .store-bar {
+    background: #191e2c;
+    padding: 10px 52px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #2e374f;
+    flex-wrap: wrap;
+  }
+
+  .store-bar-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #6b7a96;
+    font-weight: 600;
+    margin-right: 6px;
+    flex-shrink: 0;
+  }
+
+  .store-bar a {
+    display: inline-block;
+    padding: 5px 16px;
+    border: 1.5px solid #4a5a7a;
+    border-radius: 20px;
+    color: #c8d8f0;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    font-family: 'Nunito Sans', sans-serif;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+    white-space: nowrap;
+  }
+
+  .store-bar a:hover {
+    border-color: #e8d9b4;
+    color: #e8d9b4;
+    background: rgba(232,217,180,0.08);
   }
 
   .logo-block .tagline {
@@ -102,19 +219,22 @@
   input[type=text] {
     width: 100%;
     padding: 10px 14px 10px 38px;
-    background: #22293a;
-    border: 1px solid #3a4560;
+    background: #fff;
+    border: 1.5px solid #c8d0dc;
     border-radius: 3px;
-    color: #e8d9b4;
+    color: #22293a;
     font-family: 'Nunito Sans', sans-serif;
     font-size: 0.85rem;
     outline: none;
-    transition: border-color 0.2s;
-    font-weight: 300;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-weight: 400;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
   }
 
-  input[type=text]:focus { border-color: #e8d9b4; }
-  input[type=text]::placeholder { color: #3a4560; }
+  input[type=text]:focus { border-color: #22293a; box-shadow: 0 0 0 3px rgba(34,41,58,0.08); }
+  input[type=text]::placeholder { color: #aab0bc; }
+
+  .search-wrap::before { color: #6b7a96; }
 
   .count {
     font-size: 0.72rem;
@@ -163,6 +283,23 @@
 
   td.desc-cell { white-space: normal; max-width: 520px; }
   td.grp-start { border-left: 1px solid #f0eeeb; }
+
+  td.img-cell {
+    width: 64px;
+    padding: 6px 10px;
+    text-align: center;
+  }
+
+  td.img-cell img {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    border-radius: 3px;
+    background: #f7f5f2;
+    display: block;
+  }
+
+  th.img-col { width: 64px; text-align: center; }
   tr:hover td { background: #faf8f4; }
 
   .item-code { font-weight: 600; font-size: 0.8rem; color: #22293a; letter-spacing: 0.04em; }
@@ -191,10 +328,32 @@
 
 <div class="page-header">
   <div class="logo-block">
-    <h1>YAFA</h1>
+    <h1><a href="https://yafabrands.com/pages/main-brand-page" target="_blank" rel="noopener">YAFA</a></h1>
     <div class="tagline">Inventory · On Hand</div>
+    <div class="site-link"><a href="https://yafabrands.com/pages/main-brand-page" target="_blank" rel="noopener">Visit yafabrands.com ↗</a></div>
   </div>
-  <div class="header-meta" id="header-meta">Loading&hellip;</div>
+
+  <div class="catalog-center">
+    <span class="cat-section-label">2026 Catalogs</span>
+    <div class="catalog-btns">
+      <a href="https://www.flipsnack.com/FABBCCA8B7A/2026-monteverde-catalog" target="_blank" rel="noopener">Monteverde ↗</a>
+      <a href="https://www.flipsnack.com/FABBCCA8B7A/monteverde-refill-catalog-2026" target="_blank" rel="noopener">MV Refills ↗</a>
+      <a href="https://www.flipsnack.com/FABBCCA8B7A/2026_ck_catalog_updated" target="_blank" rel="noopener">Conklin ↗</a>
+      <a href="https://privatereserveink.com/pages/catalog" target="_blank" rel="noopener">Private Reserve ↗</a>
+    </div>
+  </div>
+
+  <div style="display:flex; justify-content:flex-end;">
+    <div class="header-meta" id="header-meta">Loading&hellip;</div>
+  </div>
+</div>
+
+<div class="store-bar">
+  <span class="store-bar-label">Brand Sites</span>
+  <a href="https://www.monteverdepens.com" target="_blank" rel="noopener">monteverdepens.com ↗</a>
+  <a href="https://www.conklinpens.com" target="_blank" rel="noopener">conklinpens.com ↗</a>
+  <a href="https://www.yafabrands.com" target="_blank" rel="noopener">yafabrands.com ↗</a>
+  <a href="https://www.privatereserveink.com" target="_blank" rel="noopener">privatereserveink.com ↗</a>
 </div>
 
 <div class="stat-bar">
@@ -230,6 +389,7 @@
   <table id="tbl">
   <thead>
   <tr>
+    <th class="img-col"></th>
     <th onclick="sortBy(0)">Item <span class="arr">↕</span></th>
     <th onclick="sortBy(1)">Description <span class="arr">↕</span></th>
     <th onclick="sortBy(2)" class="inv grp-start">Inv Qty <span class="arr">↕</span></th>
@@ -261,7 +421,11 @@ function render(rows) {
   let h = '', tiq = 0;
   rows.forEach(r => {
     tiq += r.inv_qty;
+    const imgCell = r.image_url
+      ? `<td class="img-cell"><img src="${r.image_url}" alt="${r.item}" loading="lazy" onerror="this.style.display='none'"/></td>`
+      : `<td class="img-cell"></td>`;
     h += `<tr>
+      ${imgCell}
       <td class="item-code">${r.item}</td>
       <td class="desc-cell">${r.desc}</td>
       <td class="inv grp-start${r.inv_qty <= 0 ? ' zero' : ''}">${fq(r.inv_qty)}</td>
@@ -270,7 +434,7 @@ function render(rows) {
   document.getElementById('tbody').innerHTML = h;
   document.getElementById('tfoot').innerHTML =
     `<tr>
-      <td colspan="2">Total — ${rows.length} items</td>
+      <td colspan="3">Total — ${rows.length} items</td>
       <td class="inv grp-start">${fq(tiq)}</td>
     </tr>`;
   updateStats(rows);
