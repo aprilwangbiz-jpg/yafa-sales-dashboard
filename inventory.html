@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>YAFA Inventory</title>
+<title>YAFA Brands Quick Inventory Lookup</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Nunito+Sans:wght@300;400;600&display=swap');
 
@@ -25,26 +25,14 @@
     gap: 20px;
   }
 
-  .logo-block h1 a {
+  .logo-block h1 {
     font-family: 'Libre Baskerville', serif;
     font-size: 1.9rem;
     font-weight: 700;
     color: #e8d9b4;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    text-decoration: none;
   }
-
-  .logo-block h1 a::after {
-    content: ' ↗';
-    font-size: 0.9rem;
-    opacity: 0.6;
-    vertical-align: super;
-    font-family: 'Nunito Sans', sans-serif;
-  }
-
-  .logo-block h1 a:hover { color: #fff; }
-  .logo-block h1 a:hover::after { opacity: 1; }
 
   .logo-block .site-link {
     font-size: 0.6rem;
@@ -328,9 +316,8 @@
 
 <div class="page-header">
   <div class="logo-block">
-    <h1><a href="https://yafabrands.com/pages/main-brand-page" target="_blank" rel="noopener">YAFA</a></h1>
+    <h1>YAFA BRANDS QUICK INVENTORY LOOKUP</h1>
     <div class="tagline">Inventory · On Hand</div>
-    <div class="site-link"><a href="https://yafabrands.com/pages/main-brand-page" target="_blank" rel="noopener">Visit yafabrands.com ↗</a></div>
   </div>
 
   <div class="catalog-center">
@@ -352,7 +339,6 @@
   <span class="store-bar-label">Brand Sites</span>
   <a href="https://www.monteverdepens.com" target="_blank" rel="noopener">monteverdepens.com ↗</a>
   <a href="https://www.conklinpens.com" target="_blank" rel="noopener">conklinpens.com ↗</a>
-  <a href="https://www.yafabrands.com" target="_blank" rel="noopener">yafabrands.com ↗</a>
   <a href="https://www.privatereserveink.com" target="_blank" rel="noopener">privatereserveink.com ↗</a>
 </div>
 
@@ -393,6 +379,7 @@
     <th onclick="sortBy(0)">Item <span class="arr">↕</span></th>
     <th onclick="sortBy(1)">Description <span class="arr">↕</span></th>
     <th onclick="sortBy(2)" class="inv grp-start">Inv Qty <span class="arr">↕</span></th>
+    <th onclick="sortBy(3)" class="inv">Net Avail <span class="arr">↕</span></th>
   </tr>
   </thead>
   <tbody id="tbody"></tbody>
@@ -418,9 +405,10 @@ function updateStats(rows) {
 }
 
 function render(rows) {
-  let h = '', tiq = 0;
+  let h = '', tiq = 0, tna = 0;
   rows.forEach(r => {
     tiq += r.inv_qty;
+    tna += (r.net_avail || 0);
     const imgCell = r.image_url
       ? `<td class="img-cell"><img src="${r.image_url}" alt="${r.item}" loading="lazy" onerror="this.style.display='none'"/></td>`
       : `<td class="img-cell"></td>`;
@@ -429,6 +417,7 @@ function render(rows) {
       <td class="item-code">${r.item}</td>
       <td class="desc-cell">${r.desc}</td>
       <td class="inv grp-start${r.inv_qty <= 0 ? ' zero' : ''}">${fq(r.inv_qty)}</td>
+      <td class="inv${(r.net_avail || 0) <= 0 ? ' zero' : ''}">${fq(r.net_avail || 0)}</td>
     </tr>`;
   });
   document.getElementById('tbody').innerHTML = h;
@@ -436,6 +425,7 @@ function render(rows) {
     `<tr>
       <td colspan="3">Total — ${rows.length} items</td>
       <td class="inv grp-start">${fq(tiq)}</td>
+      <td class="inv">${fq(tna)}</td>
     </tr>`;
   updateStats(rows);
 }
@@ -455,7 +445,7 @@ function sortBy(col) {
 }
 
 function applySort() {
-  const keys = ['item', 'desc', 'inv_qty'];
+  const keys = ['item', 'desc', 'inv_qty', 'net_avail'];
   filtered.sort((a, b) => {
     const va = a[keys[sortCol]], vb = b[keys[sortCol]];
     return typeof va === 'string'
