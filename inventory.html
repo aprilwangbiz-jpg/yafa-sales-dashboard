@@ -377,9 +377,8 @@
   <tr>
     <th class="img-col"></th>
     <th onclick="sortBy(0)">Item <span class="arr">↕</span></th>
-    <th onclick="sortBy(1)">Description <span class="arr">↕</span></th>
-    <th onclick="sortBy(2)" class="inv grp-start">Inv Qty <span class="arr">↕</span></th>
-    <th onclick="sortBy(3)" class="inv">Net Avail <span class="arr">↕</span></th>
+    <th onclick="sortBy(1)" class="inv grp-start">Net Avail <span class="arr">↕</span></th>
+    <th onclick="sortBy(2)">Description <span class="arr">↕</span></th>
   </tr>
   </thead>
   <tbody id="tbody"></tbody>
@@ -394,9 +393,9 @@ let DATA = [], sortCol = 0, sortAsc = true, filtered = [];
 const fq = v => v.toLocaleString('en-US', {maximumFractionDigits: 0});
 
 function updateStats(rows) {
-  const total   = rows.reduce((s, r) => s + r.inv_qty, 0);
-  const instock = rows.filter(r => r.inv_qty > 0).length;
-  const oos     = rows.filter(r => r.inv_qty <= 0).length;
+  const total   = rows.reduce((s, r) => s + (r.net_avail || 0), 0);
+  const instock = rows.filter(r => (r.net_avail || 0) > 0).length;
+  const oos     = rows.filter(r => (r.net_avail || 0) <= 0).length;
   document.getElementById('stat-items').textContent   = rows.length;
   document.getElementById('stat-total').textContent   = fq(total);
   document.getElementById('stat-instock').textContent = instock;
@@ -405,9 +404,8 @@ function updateStats(rows) {
 }
 
 function render(rows) {
-  let h = '', tiq = 0, tna = 0;
+  let h = '', tna = 0;
   rows.forEach(r => {
-    tiq += r.inv_qty;
     tna += (r.net_avail || 0);
     const imgCell = r.image_url
       ? `<td class="img-cell"><img src="${r.image_url}" alt="${r.item}" loading="lazy" onerror="this.style.display='none'"/></td>`
@@ -415,17 +413,16 @@ function render(rows) {
     h += `<tr>
       ${imgCell}
       <td class="item-code">${r.item}</td>
+      <td class="inv grp-start${(r.net_avail || 0) <= 0 ? ' zero' : ''}">${fq(r.net_avail || 0)}</td>
       <td class="desc-cell">${r.desc}</td>
-      <td class="inv grp-start${r.inv_qty <= 0 ? ' zero' : ''}">${fq(r.inv_qty)}</td>
-      <td class="inv${(r.net_avail || 0) <= 0 ? ' zero' : ''}">${fq(r.net_avail || 0)}</td>
     </tr>`;
   });
   document.getElementById('tbody').innerHTML = h;
   document.getElementById('tfoot').innerHTML =
     `<tr>
-      <td colspan="3">Total — ${rows.length} items</td>
-      <td class="inv grp-start">${fq(tiq)}</td>
-      <td class="inv">${fq(tna)}</td>
+      <td colspan="2">Total — ${rows.length} items</td>
+      <td class="inv grp-start">${fq(tna)}</td>
+      <td></td>
     </tr>`;
   updateStats(rows);
 }
@@ -445,7 +442,7 @@ function sortBy(col) {
 }
 
 function applySort() {
-  const keys = ['item', 'desc', 'inv_qty', 'net_avail'];
+  const keys = ['item', 'net_avail', 'desc'];
   filtered.sort((a, b) => {
     const va = a[keys[sortCol]], vb = b[keys[sortCol]];
     return typeof va === 'string'
