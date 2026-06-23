@@ -288,10 +288,11 @@
   }
 
   th.img-col { width: 64px; text-align: center; }
-  th.net-avail-col { width: 90px; }
+  th.net-avail-col { width: 100px; }
+  th.item-col { width: 25ch; }
   tr:hover td { background: #faf8f4; }
 
-  .item-code { font-weight: 600; font-size: 0.8rem; color: #22293a; letter-spacing: 0.04em; }
+  .item-code { font-weight: 600; font-size: 0.8rem; color: #22293a; letter-spacing: 0.04em; max-width: 25ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .inv { text-align: right; font-weight: 600; color: #5a6e3a; background: #f7fbf3; }
   tr:hover td.inv { background: #eff7e8; }
   .zero { color: #ddd !important; font-weight: 300 !important; }
@@ -377,7 +378,7 @@
   <thead>
   <tr>
     <th class="img-col"></th>
-    <th onclick="sortBy(0)">Item <span class="arr">↕</span></th>
+    <th onclick="sortBy(0)" class="item-col">Item <span class="arr">↕</span></th>
     <th onclick="sortBy(1)" class="inv grp-start net-avail-col">Net Avail <span class="arr">↕</span></th>
     <th onclick="sortBy(2)">Description <span class="arr">↕</span></th>
   </tr>
