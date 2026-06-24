@@ -391,7 +391,7 @@
 </div>
 
 <script>
-(function(){if(!sessionStorage.getItem('yafa_pass'))location.replace('login.html');})();
+(function(){if(!sessionStorage.getItem('yafa_pass'))location.replace('login.html?next=inventory.html');})();
 function b64(s){return Uint8Array.from(atob(s),c=>c.charCodeAt(0));}
 async function loadEncrypted(url){
   const r=await fetch(url);

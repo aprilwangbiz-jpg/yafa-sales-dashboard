@@ -45,6 +45,7 @@ async function deriveKey(password,salt){
 }
 
 async function signIn(){
+  const next=new URLSearchParams(location.search).get('next')||'index.html';
   const pwd=document.getElementById('pwd').value;
   if(!pwd){document.getElementById('err').textContent='Please enter the password.';return;}
   document.getElementById('err').textContent='';
@@ -56,13 +57,13 @@ async function signIn(){
     const blob=await res.json();
     if(!blob.enc){
       sessionStorage.setItem('yafa_pass',pwd);
-      location.replace('index.html');
+      location.replace(next);
       return;
     }
     const key=await deriveKey(pwd,blob.salt);
     await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(blob.iv)},key,b64(blob.data));
     sessionStorage.setItem('yafa_pass',pwd);
-    location.replace('index.html');
+    location.replace(next);
   }catch(e){
     document.getElementById('btn').disabled=false;
     document.getElementById('spinner').style.display='none';
