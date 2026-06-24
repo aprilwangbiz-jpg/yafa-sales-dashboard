@@ -332,9 +332,8 @@
     </div>
   </div>
 
-  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:10px;">
+  <div style="display:flex; justify-content:flex-end;">
     <div class="header-meta" id="header-meta">Loading&hellip;</div>
-    <button onclick="sessionStorage.removeItem('yafa_pass');location.replace('login.html')" style="background:none;border:1px solid #4a5568;padding:5px 12px;font-family:'Nunito Sans',sans-serif;font-size:0.68rem;letter-spacing:0.14em;text-transform:uppercase;color:#8a96a8;cursor:pointer;" onmouseover="this.style.color='#e8d9b4';this.style.borderColor='#e8d9b4'" onmouseout="this.style.color='#8a96a8';this.style.borderColor='#4a5568'">Sign Out</button>
   </div>
 </div>
 
@@ -391,20 +390,6 @@
 </div>
 
 <script>
-(function(){if(!sessionStorage.getItem('yafa_pass'))location.replace('login.html?next=inventory.html');})();
-function b64(s){return Uint8Array.from(atob(s),c=>c.charCodeAt(0));}
-async function loadEncrypted(url){
-  const r=await fetch(url);
-  const blob=await r.json();
-  if(!blob.enc)return blob;
-  const pass=sessionStorage.getItem('yafa_pass');
-  const km=await crypto.subtle.importKey('raw',new TextEncoder().encode(pass),'PBKDF2',false,['deriveKey']);
-  const key=await crypto.subtle.deriveKey(
-    {name:'PBKDF2',salt:b64(blob.salt),iterations:200000,hash:'SHA-256'},
-    km,{name:'AES-GCM',length:256},false,['decrypt']);
-  const plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:b64(blob.iv)},key,b64(blob.data));
-  return JSON.parse(new TextDecoder().decode(plain));
-}
 let DATA = [], sortCol = 0, sortAsc = true, filtered = [];
 
 const fq = v => v.toLocaleString('en-US', {maximumFractionDigits: 0});
@@ -469,20 +454,20 @@ function applySort() {
   render(filtered);
 }
 
-(async function(){
-  try{
-    const data=await loadEncrypted('inventory_data.json');
+fetch('inventory_data.json')
+  .then(r => r.json())
+  .then(data => {
     DATA     = data.items || [];
     filtered = DATA.slice();
     document.getElementById('header-meta').innerHTML =
       'Updated <strong>' + data.updated + '</strong>';
     applySort();
-  }catch(e){
+  })
+  .catch(e => {
     document.getElementById('err').textContent =
-      'Could not load inventory data — run fetch_inventory.py first. (' + e.message + ')';
+      'Could not load inventory_data.json — run fetch_inventory.py first. (' + e.message + ')';
     document.getElementById('header-meta').textContent = '';
-  }
-})();
+  });
 </script>
 </body>
 </html>
