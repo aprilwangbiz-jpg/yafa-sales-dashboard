@@ -4,11 +4,14 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>YAFA Dashboard — Sign In</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&family=Caveat:wght@400&display=swap" rel="stylesheet"/>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap');
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-  body{font-family:'DM Sans',sans-serif;background:#f7f4ef;color:#1a1a1a;min-height:100vh;display:flex;align-items:center;justify-content:center;}
-  .card{width:100%;max-width:380px;padding:48px 40px;background:#fff;border-top:3px solid #8b6914;}
+  body{font-family:'DM Sans',sans-serif;background:#f7f4ef;color:#1a1a1a;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 24px;}
+  .wrapper{display:flex;align-items:center;gap:64px;max-width:1020px;width:100%;}
+  .illustration{flex:1;min-width:0;}
+  .illustration svg{width:100%;height:auto;display:block;}
+  .card{flex:0 0 360px;padding:48px 40px;background:#fff;border-top:3px solid #8b6914;}
   .brand-line{display:flex;align-items:center;gap:14px;margin-bottom:6px;}
   .brand-rule{width:36px;height:2px;background:#8b6914;flex-shrink:0;}
   h1{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;color:#1a1a1a;line-height:1;}
@@ -21,17 +24,115 @@
   button:disabled{background:#ccc;cursor:default;}
   #err{margin-top:16px;font-size:0.82rem;color:#c0392b;min-height:1.2em;text-align:center;}
   #spinner{display:none;margin-top:16px;text-align:center;font-size:0.78rem;color:#aaa;letter-spacing:0.1em;text-transform:uppercase;}
+  @media(max-width:720px){.wrapper{flex-direction:column;gap:32px;}.card{flex:none;width:100%;max-width:380px;}}
 </style>
 </head>
 <body>
-<div class="card">
-  <div class="brand-line"><div class="brand-rule"></div><h1>YAFA</h1></div>
-  <div class="subtitle">Sales Dashboard</div>
-  <label for="pwd">Password</label>
-  <input type="password" id="pwd" autocomplete="current-password" autofocus/>
-  <button id="btn" onclick="signIn()">Sign In</button>
-  <div id="err"></div>
-  <div id="spinner">Verifying&hellip;</div>
+<div class="wrapper">
+
+  <!-- Ball illustration: Ball presenting password slip at a locked door -->
+  <div class="illustration">
+  <svg viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg">
+    <rect width="1600" height="900" fill="#FFFFFF"/>
+
+    <!-- floor line -->
+    <path d="M 120 828 Q 500 822, 900 826 T 1500 824"
+          stroke="#1a1a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+    <!-- wall left of door -->
+    <path d="M 120 120 Q 122 116, 830 118"
+          stroke="#1a1a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M 120 120 Q 116 400, 118 828"
+          stroke="#1a1a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+    <!-- wall right of door -->
+    <path d="M 1210 118 Q 1350 116, 1500 120"
+          stroke="#1a1a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M 1500 120 Q 1498 400, 1500 828"
+          stroke="#1a1a1a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+    <!-- DOOR outer body -->
+    <path d="M 832 120 Q 834 116, 1208 118 Q 1213 120, 1210 826 Q 1206 830, 832 828 Q 827 825, 830 120 Z"
+          fill="#faf8f3" stroke="#1a1a1a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- door top panel -->
+    <path d="M 875 158 Q 877 153, 1165 155 Q 1170 158, 1167 445 Q 1164 450, 875 447 Q 870 445, 872 158 Z"
+          fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- door bottom panel -->
+    <path d="M 875 478 Q 877 473, 1165 475 Q 1170 478, 1167 795 Q 1164 800, 875 797 Q 870 795, 872 478 Z"
+          fill="none" stroke="#1a1a1a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- keyhole body (circle) -->
+    <path d="M 1020 372 C 1035 372, 1046 383, 1046 398 C 1046 413, 1035 424, 1020 424 C 1005 424, 994 413, 994 398 C 994 383, 1005 372, 1020 372 Z"
+          fill="#1a1a1a"/>
+    <!-- keyhole slot -->
+    <path d="M 1009 416 Q 1007 444, 1020 450 Q 1033 444, 1031 416 Z"
+          fill="#1a1a1a"/>
+
+    <!-- door knob -->
+    <path d="M 843 494 C 856 494, 865 502, 865 513 C 865 524, 856 532, 843 532 C 830 532, 821 524, 821 513 C 821 502, 830 494, 843 494 Z"
+          fill="none" stroke="#1a1a1a" stroke-width="2.5"/>
+    <path d="M 830 513 Q 820 513, 814 513"
+          stroke="#1a1a1a" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+    <!-- BALL — center at (530, 740), radius ~55 -->
+    <!-- body -->
+    <path d="M 530 685
+             C 566 685, 586 705, 586 740
+             C 586 775, 566 795, 530 795
+             C 494 795, 474 775, 474 740
+             C 474 705, 494 685, 530 685 Z"
+          fill="#111111" stroke="#111111" stroke-width="1.5"/>
+    <!-- eyes — looking right toward door -->
+    <circle cx="518" cy="730" r="6" fill="#FFFFFF"/>
+    <circle cx="546" cy="728" r="6" fill="#FFFFFF"/>
+    <!-- left leg -->
+    <path d="M 504 792 Q 498 812, 496 826" stroke="#1a1a1a" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+    <!-- right leg -->
+    <path d="M 554 792 Q 556 812, 558 826" stroke="#1a1a1a" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+    <!-- left arm (hanging) -->
+    <path d="M 476 736 Q 456 756, 452 778" stroke="#1a1a1a" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+    <!-- right arm — extended upward toward door holding slip -->
+    <path d="M 584 728 Q 635 694, 668 668" stroke="#1a1a1a" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+
+    <!-- password slip in Ball's raised hand -->
+    <path d="M 665 644 Q 667 638, 728 640 Q 733 643, 730 688 Q 728 693, 665 690 Q 660 688, 663 644 Z"
+          fill="#fffef8" stroke="#1a1a1a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <!-- three lines on slip representing text -->
+    <path d="M 672 656 Q 694 654, 720 656" stroke="#1a1a1a" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <path d="M 672 666 Q 698 664, 718 666" stroke="#1a1a1a" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <path d="M 672 676 Q 692 674, 712 676" stroke="#1a1a1a" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+
+    <!-- orange annotation: "password?" with arrow to slip -->
+    <text x="342" y="610" font-family="'Caveat','Patrick Hand','Comic Sans MS',cursive"
+          font-size="46" fill="#e8862c" transform="rotate(-4 342 610)">password?</text>
+    <path d="M 618 608 Q 642 622, 664 642"
+          stroke="#e8862c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M 664 642 L 650 636 M 664 642 L 658 654"
+          stroke="#e8862c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+    <!-- blue annotation on door panel: "authorized only" -->
+    <text x="888" y="316" font-family="'Caveat','Patrick Hand','Comic Sans MS',cursive"
+          font-size="32" fill="#2c6fe8" transform="rotate(1.5 888 316)">authorized only</text>
+    <!-- small underline under the text -->
+    <path d="M 888 322 Q 1010 318, 1130 322"
+          stroke="#2c6fe8" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.6"/>
+
+  </svg>
+  </div>
+
+  <!-- Login card -->
+  <div class="card">
+    <div class="brand-line"><div class="brand-rule"></div><h1>YAFA</h1></div>
+    <div class="subtitle">Sales Dashboard</div>
+    <label for="pwd">Password</label>
+    <input type="password" id="pwd" autocomplete="current-password" autofocus/>
+    <button id="btn" onclick="signIn()">Sign In</button>
+    <div id="err"></div>
+    <div id="spinner">Verifying&hellip;</div>
+  </div>
+
 </div>
 <script>
 function b64(s){return Uint8Array.from(atob(s),c=>c.charCodeAt(0));}
